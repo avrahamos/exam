@@ -208,20 +208,29 @@ function mission1(militaryUnit) {
 
   return `${chiefOfStaff.rank}, ${chiefOfStaff.name}, ${chiefOfStaff.contact.phone}`;
 }
-console.log(mission1(militaryUnit));
 
 function mission2(militaryUnit) {
   return militaryUnit.personnel.length.toString();
 }
-console.log(mission2(militaryUnit));
+
+function mission3(newDeployment, militaryUnit) {
+  militaryUnit.history.push({
+    eventDate: militaryUnit.currentDeployment.startDate,
+    eventDescription: `Deployment to ${militaryUnit.currentDeployment.location} for ${militaryUnit.currentDeployment.mission}`,
+  });
+
+  militaryUnit.currentDeployment = newDeployment;
+
+  return militaryUnit;
+}
 
 function mission4(newFirearm, militaryUnit) {
-  const existingFirearmIndex = militaryUnit.firearms.quantity(
+  const existingFirearmIndex = militaryUnit.equipment.firearms.findIndex(
     (firearm) =>
       firearm.type === newFirearm.type && firearm.status === newFirearm.status
   );
 
-  if (existingFirearmIndex != -1) {
+  if (existingFirearmIndex !== -1) {
     militaryUnit.equipment.firearms[existingFirearmIndex].quantity +=
       newFirearm.quantity;
   } else {
@@ -231,17 +240,6 @@ function mission4(newFirearm, militaryUnit) {
   return militaryUnit;
 }
 
-const newFirearm = [
-  {
-    type: "M1 Abrams Tank",
-
-    quantity: 23,
-
-    status: "Operational",
-  },
-];
-console.log(mission4(newFirearm, militaryUnit));
-
 function mission5(militaryUnit) {
   const totalDuration = militaryUnit.trainingPrograms.reduce(
     (sum, program) => sum + program.duration,
@@ -249,4 +247,30 @@ function mission5(militaryUnit) {
   );
   return totalDuration.toString();
 }
+
+console.log("Chief of Staff details:", mission1(militaryUnit));
+
+console.log("Number of personnel in the unit :", mission2(militaryUnit));
+
+const newDeployment = {
+  location: "Gaza",
+  mission: "Kidnapped rescue",
+  startDate: "2025-01-01",
+  estimatedEndDate: "2025-12-31",
+};
+const updatedUnit = mission3(newDeployment, militaryUnit);
+
+console.log(updatedUnit.currentDeployment);
+console.log(updatedUnit.history[updatedUnit.history.length - 1]);
+
+const newFirearm = {
+  type: "Field Radios",
+
+  quantity: 1000,
+
+  status: "Operational",
+};
+const unitWithNewFirearm = mission4(newFirearm, militaryUnit);
+console.log(unitWithNewFirearm.equipment.firearms);
+
 console.log(mission5(militaryUnit));
