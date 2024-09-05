@@ -202,3 +202,51 @@ let militaryUnit = {
     estimatedEndDate: "2024-12-31",
   },
 };
+
+function mission1(militaryUnit) {
+  const chiefOfStaff = militaryUnit.commandStructure.chiefOfStaff;
+
+  return `${chiefOfStaff.rank}, ${chiefOfStaff.name}, ${chiefOfStaff.contact.phone}`;
+}
+console.log(mission1(militaryUnit));
+
+function mission2(militaryUnit) {
+  return militaryUnit.personnel.length.toString();
+}
+console.log(mission2(militaryUnit));
+
+function mission4(newFirearm, militaryUnit) {
+  const existingFirearmIndex = militaryUnit.firearms.quantity(
+    (firearm) =>
+      firearm.type === newFirearm.type && firearm.status === newFirearm.status
+  );
+
+  if (existingFirearmIndex != -1) {
+    militaryUnit.equipment.firearms[existingFirearmIndex].quantity +=
+      newFirearm.quantity;
+  } else {
+    militaryUnit.equipment.firearms.push(newFirearm);
+  }
+
+  return militaryUnit;
+}
+
+const newFirearm = [
+  {
+    type: "M1 Abrams Tank",
+
+    quantity: 23,
+
+    status: "Operational",
+  },
+];
+console.log(mission4(newFirearm, militaryUnit));
+
+function mission5(militaryUnit) {
+  const totalDuration = militaryUnit.trainingPrograms.reduce(
+    (sum, program) => sum + program.duration,
+    0
+  );
+  return totalDuration.toString();
+}
+console.log(mission5(militaryUnit));
